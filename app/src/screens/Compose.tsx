@@ -140,7 +140,7 @@ export function Compose() {
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-3 border-b border-divider px-4 py-3 md:px-6">
-          <Link to="/" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← Library</Link>
+          <Link to="/library" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← Library</Link>
           <div className="flex-1" />
           <span className="font-mono text-[11px] text-ink-soft">{bytes} B</span>
           <Pill tone="accent">{kind.toUpperCase()}</Pill>

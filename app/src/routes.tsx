@@ -5,6 +5,7 @@ import { Compose } from './screens/Compose';
 import { Details } from './screens/Details';
 import { Library } from './screens/Library';
 import { Run } from './screens/Run';
+import { Welcome } from './screens/Welcome';
 import { About } from './screens/settings/About';
 import { Appearance } from './screens/settings/Appearance';
 import { Credits } from './screens/settings/Credits';
@@ -28,7 +29,8 @@ export const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
-      { path: '/', element: <Library /> },
+      { path: '/', element: <Welcome /> },
+      { path: '/library', element: <Library /> },
       { path: '/run/:id', element: <Run /> },
       { path: '/details/:id', element: <Details /> },
       { path: '/compose', element: <Compose /> },

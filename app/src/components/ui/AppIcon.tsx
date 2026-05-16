@@ -1,7 +1,7 @@
 // AppIcon — rounded tile + glyph/emoji/image. Mirrors design/project/kit.jsx
 // AppIcon. See DESIGN.md §4 for the icon system.
 
-import { SB_FILLS, type FillName } from '../../lib/theme';
+import { SB_FILLS, SB_LIGHT, type FillName } from '../../lib/theme';
 import type { IconType } from '../../lib/repo/types';
 
 type Props = {
@@ -35,7 +35,10 @@ export function AppIcon({
         height: size,
         borderRadius: radius,
         background: bg,
-        border: '1.5px solid rgb(var(--ink))',
+        // Tile fills are always light pastels (mode defaults to 'light'), so the
+        // border and glyph stay locked to the dark ink in both themes — otherwise
+        // dark mode renders light-on-light and washes out.
+        border: `1.5px solid ${SB_LIGHT.ink}`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -43,7 +46,7 @@ export function AppIcon({
         fontSize,
         fontWeight: 600,
         letterSpacing: 0.5,
-        color: 'rgb(var(--ink))',
+        color: SB_LIGHT.ink,
         flexShrink: 0,
         overflow: 'hidden',
       }}

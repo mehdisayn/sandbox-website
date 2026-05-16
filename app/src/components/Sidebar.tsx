@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 type Item = { to: string; label: string; glyph: string };
 
 const ITEMS: Item[] = [
-  { to: '/',         label: 'Library',      glyph: '▦' },
+  { to: '/library', label: 'Library',      glyph: '▦' },
   { to: '/compose',  label: 'Compose',      glyph: '✎' },
   { to: '/settings/dependencies', label: 'Dependencies', glyph: '⧉' },
   { to: '/settings', label: 'Settings',     glyph: '⚙' },
@@ -31,7 +31,7 @@ export function Sidebar({ footer }: { footer?: ReactNode }) {
         <NavLink
           key={it.to}
           to={it.to}
-          end={it.to === '/'}
+          end={it.to === '/library'}
           className={({ isActive }) =>
             [
               'flex items-center gap-2.5 rounded-[9px] border px-2.5 py-2 text-[13px]',

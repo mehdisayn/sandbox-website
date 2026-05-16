@@ -56,7 +56,7 @@ export function Details() {
       <div className="flex h-screen items-center justify-center bg-paper text-ink">
         <div className="text-center">
           <div className="text-lg font-medium">Not found</div>
-          <Link to="/" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← library</Link>
+          <Link to="/library" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← library</Link>
         </div>
       </div>
     );
@@ -109,7 +109,7 @@ export function Details() {
     if (!window.confirm(`Delete "${a.name}"? This cannot be undone.`)) return;
     setBusy(true);
     await artifactRepo.delete(a.id);
-    navigate('/');
+    navigate('/library');
   }
 
   return (
@@ -117,7 +117,7 @@ export function Details() {
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-3 border-b border-divider px-4 py-3 md:px-6">
-          <Link to="/" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← Library</Link>
+          <Link to="/library" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← Library</Link>
           <div className="flex-1 text-sm font-medium">Details</div>
           <Btn variant="primary" onClick={() => navigate(`/run/${artifact.id}`)}>Open</Btn>
         </div>

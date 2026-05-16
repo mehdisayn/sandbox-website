@@ -3,7 +3,7 @@
 import { NavLink } from 'react-router-dom';
 
 const ITEMS = [
-  { to: '/',         label: 'Library',  glyph: '▦' },
+  { to: '/library', label: 'Library',  glyph: '▦' },
   { to: '/compose',  label: 'Compose',  glyph: '✎' },
   { to: '/settings', label: 'Settings', glyph: '⚙' },
 ];
@@ -19,7 +19,7 @@ export function BottomNav() {
         <NavLink
           key={it.to}
           to={it.to}
-          end={it.to === '/'}
+          end={it.to === '/library'}
           className={({ isActive }) =>
             [
               'flex flex-1 flex-col items-center gap-0.5',

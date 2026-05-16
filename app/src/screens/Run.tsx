@@ -32,7 +32,7 @@ export function Run() {
       <div className="min-h-screen bg-paper text-ink flex items-center justify-center">
         <div className="text-center">
           <div className="text-lg font-medium">Not found</div>
-          <Link to="/" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← back to library</Link>
+          <Link to="/library" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">← back to library</Link>
         </div>
       </div>
     );
@@ -49,7 +49,7 @@ export function Run() {
         ) : (
           <div className="flex-1 font-mono text-xs uppercase tracking-widest text-ink-soft">loading…</div>
         )}
-        <Link to="/" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">close</Link>
+        <Link to="/library" className="font-mono text-xs uppercase tracking-widest text-ink-soft hover:text-ink">close</Link>
       </header>
       <div className="flex-1 min-h-0">
         {artifact && deps != null && (
