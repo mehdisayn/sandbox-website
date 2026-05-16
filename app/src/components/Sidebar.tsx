@@ -45,6 +45,9 @@ export function Sidebar({ footer }: { footer?: ReactNode }) {
       ))}
       <div className="flex-1" />
       {footer && <div className="border-t border-dashed border-divider p-1.5 pt-2">{footer}</div>}
+      <div className="px-1.5 pt-2 font-mono text-[9px] uppercase tracking-widest text-ink-faint">
+        Built by Syed Mehedi Hussain
+      </div>
     </aside>
   );
 }

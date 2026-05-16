@@ -14,6 +14,10 @@ const MAX = 500;
 const buffer: LogEntry[] = [];
 let nextId = 1;
 const listeners = new Set<() => void>();
+// useSyncExternalStore compares snapshots by reference, so we hand out the same
+// array until the buffer actually changes — otherwise every render looks like a
+// store change and React loops on "Maximum update depth exceeded".
+let cachedSnapshot: LogEntry[] = [];
 
 function push(level: LogLevel, args: unknown[]) {
   const message = args.map((a) => {
@@ -23,6 +27,7 @@ function push(level: LogLevel, args: unknown[]) {
   }).join(' ');
   buffer.push({ id: nextId++, level, message, timestamp: Date.now() });
   if (buffer.length > MAX) buffer.splice(0, buffer.length - MAX);
+  cachedSnapshot = buffer.slice();
   listeners.forEach((fn) => fn());
 }
 
@@ -36,8 +41,12 @@ export function installLogCapture(): void {
   });
 }
 
-export function snapshot(): LogEntry[] { return buffer.slice(); }
-export function clearLogs(): void { buffer.length = 0; listeners.forEach((fn) => fn()); }
+export function snapshot(): LogEntry[] { return cachedSnapshot; }
+export function clearLogs(): void {
+  buffer.length = 0;
+  cachedSnapshot = [];
+  listeners.forEach((fn) => fn());
+}
 export function subscribe(fn: () => void): () => void {
   listeners.add(fn);
   return () => listeners.delete(fn);

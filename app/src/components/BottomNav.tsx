@@ -10,7 +10,11 @@ const ITEMS = [
 
 export function BottomNav() {
   return (
-    <nav aria-label="Primary navigation" className="md:hidden flex border-t border-divider bg-paper-alt px-0 pb-[18px] pt-2">
+    <div className="md:hidden border-t border-divider bg-paper-alt">
+      <div className="text-center font-mono text-[9px] uppercase tracking-widest text-ink-faint pt-1.5">
+        Built by Syed Mehedi Hussain
+      </div>
+      <nav aria-label="Primary navigation" className="flex px-0 pb-[18px] pt-2">
       {ITEMS.map((it) => (
         <NavLink
           key={it.to}
@@ -28,6 +32,7 @@ export function BottomNav() {
           <span className="text-[9.5px] font-medium">{it.label}</span>
         </NavLink>
       ))}
-    </nav>
+      </nav>
+    </div>
   );
 }
