@@ -11,8 +11,8 @@ export const SB_LIGHT = {
   card: '#ffffff',
   divider: '#d9d4c7',
   border: '#cfc9b8',
-  accent: '#e8c547',
-  accentSoft: '#fdf6dc',
+  accent: '#e07a30',
+  accentSoft: '#fce5d0',
   destructive: '#c0392b',
 } as const;
 
@@ -25,8 +25,8 @@ export const SB_DARK = {
   card: '#1a1a1a',
   divider: '#3a3a3a',
   border: '#3a3a3a',
-  accent: '#e8c547',
-  accentSoft: '#3a3216',
+  accent: '#e07a30',
+  accentSoft: '#3a1f10',
   destructive: '#c0392b',
 } as const;
 

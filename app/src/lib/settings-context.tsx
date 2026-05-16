@@ -12,14 +12,14 @@ import { PREF_KEYS } from './prefs';
 export type ThemeMode = 'system' | 'light' | 'dark';
 
 export const ACCENT_PRESETS: Record<string, { soft: string; softDark: string; label: string }> = {
-  '#e8c547': { soft: '#fdf6dc', softDark: '#3a3216', label: 'yellow' },
-  '#e3a98e': { soft: '#fce6da', softDark: '#3a2a20', label: 'clay'   },
+  '#e07a30': { soft: '#fce5d0', softDark: '#3a1f10', label: 'bucket' },
+  '#e8c547': { soft: '#fdf6dc', softDark: '#3a3216', label: 'sun'    },
   '#bcd5ec': { soft: '#e5eff8', softDark: '#1f2e3a', label: 'sky'    },
-  '#d6c8e8': { soft: '#ece4f4', softDark: '#2a233a', label: 'lilac'  },
-  '#d6e2c8': { soft: '#eaf2dd', softDark: '#243a26', label: 'sage'   },
+  '#3a7f3a': { soft: '#dcecdc', softDark: '#16321a', label: 'ball'   },
+  '#2c5da0': { soft: '#d8e3f1', softDark: '#0f1d3a', label: 'block'  },
 };
 
-const DEFAULT_ACCENT = '#e8c547';
+const DEFAULT_ACCENT = '#e07a30';
 
 type Ctx = {
   theme: ThemeMode;

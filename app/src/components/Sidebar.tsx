@@ -19,9 +19,12 @@ export function Sidebar({ footer }: { footer?: ReactNode }) {
       className="hidden md:flex w-[220px] shrink-0 flex-col gap-1.5 border-r border-divider bg-paper-alt p-[18px_14px]"
     >
       <div className="flex items-center gap-2.5 px-1.5 pb-3.5">
-        <div
-          className="flex h-[26px] w-[26px] items-center justify-center rounded-[7px] border-[1.5px] border-ink bg-accent text-xs font-bold text-ink"
-        >S</div>
+        <img
+          src="/icon.png"
+          alt=""
+          aria-hidden="true"
+          className="h-[26px] w-[26px] rounded-[7px] border-[1.5px] border-ink"
+        />
         <div className="text-[13px] font-bold tracking-[0.02em]">SANDBOX</div>
       </div>
       {ITEMS.map((it) => (

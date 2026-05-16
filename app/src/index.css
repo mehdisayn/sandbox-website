@@ -22,8 +22,8 @@
   --card:         255 255 255;
   --divider:      217 212 199;
   --border:       207 201 184;
-  --accent:       232 197 71;
-  --accent-soft:  253 246 220;
+  --accent:       224 122  48;
+  --accent-soft:  252 229 208;
   --destructive:  192  57  43;
 
   --fill-default: 236 232 222;
@@ -48,8 +48,8 @@
   --card:          26  26  26;
   --divider:       58  58  58;
   --border:        58  58  58;
-  --accent:       232 197  71;
-  --accent-soft:   58  50  22;
+  --accent:       224 122  48;
+  --accent-soft:   58  31  16;
   --destructive:  192  57  43;
 
   --fill-default:  42  42  42;

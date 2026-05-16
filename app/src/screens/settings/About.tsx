@@ -7,7 +7,7 @@ export function About() {
   return (
     <SettingsLayout title="About">
       <div className="flex flex-col items-center gap-3 py-6">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-[1.5px] border-ink bg-accent text-3xl font-bold">S</div>
+        <img src="/icon.png" alt="SANDBOX" className="h-16 w-16 rounded-2xl border-[1.5px] border-ink" />
         <h1 className="text-2xl font-bold tracking-[-0.02em]">SANDBOX <span className="text-ink-soft font-normal">/ Web</span></h1>
         <div className="text-sm text-ink-soft">Run AI artifacts in your browser.</div>
         <div className="font-mono text-[10px] uppercase tracking-widest text-ink-soft">Built by Syed Mehedi Hussain</div>
