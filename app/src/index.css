@@ -37,6 +37,12 @@
   --fill-sky:     188 213 236;
   --fill-mist:    207 217 214;
   --fill-stone:   201 196 183;
+
+  --syn-comment:  138 138 138;
+  --syn-string:    58 127  58;
+  --syn-number:   224 122  48;
+  --syn-keyword:  164  93 186;
+  --syn-tag:       44  93 160;
 }
 
 .dark {
@@ -63,7 +69,22 @@
   --fill-sky:      31  58  82;
   --fill-mist:     47  58  56;
   --fill-stone:    58  56  47;
+
+  --syn-comment:  117 117 117;
+  --syn-string:   138 209 138;
+  --syn-number:   238 154  89;
+  --syn-keyword:  195 137 219;
+  --syn-tag:      117 158 215;
 }
 
 html, body, #root { height: 100%; }
 body { margin: 0; }
+
+/* CodeEditor — colored pre layered behind a transparent textarea. */
+.syn-comment { color: rgb(var(--syn-comment)); font-style: italic; }
+.syn-string  { color: rgb(var(--syn-string));  }
+.syn-number  { color: rgb(var(--syn-number));  }
+.syn-keyword { color: rgb(var(--syn-keyword)); font-weight: 500; }
+.syn-tag     { color: rgb(var(--syn-tag));     }
+.code-editor-textarea::selection { background: rgb(var(--accent) / 0.25); }
+.code-editor-textarea::-moz-selection { background: rgb(var(--accent) / 0.25); }

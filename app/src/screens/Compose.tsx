@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
 import { BottomNav } from '../components/BottomNav';
+import { CodeEditor } from '../components/CodeEditor';
 import { IconPicker, type IconValue } from '../components/IconPicker';
 import { Btn } from '../components/ui/Btn';
 import { Input } from '../components/ui/Input';
@@ -152,12 +153,12 @@ export function Compose() {
         <div className="flex flex-1 min-h-0 flex-col md:flex-row">
           {/* Editor */}
           <div className="flex min-h-0 flex-1 flex-col">
-            <textarea
+            <CodeEditor
               value={source}
-              onChange={(e) => setSource(e.target.value)}
-              spellCheck={false}
-              className="h-full w-full resize-none bg-paper p-4 font-mono text-[13px] leading-[1.5] text-ink outline-none md:p-6"
+              onChange={setSource}
+              language={kind}
               placeholder="// paste or type JSX / HTML here"
+              className="h-full w-full"
             />
           </div>
 
