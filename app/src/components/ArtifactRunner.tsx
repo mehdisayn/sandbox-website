@@ -48,8 +48,11 @@ export function ArtifactRunner({ source, kind = 'jsx', deps, onError, onNetworkE
 
   useEffect(() => {
     function onMessage(e: MessageEvent) {
-      if (e.origin !== RUNTIME_ORIGIN) return;
+      // sandbox="allow-scripts" (no allow-same-origin) gives the iframe an opaque
+      // origin, so its postMessages arrive with event.origin === "null". Trust the
+      // message by identity instead — only accept from our specific iframe window.
       if (e.source !== ref.current?.contentWindow) return;
+      if (e.origin !== 'null' && e.origin !== RUNTIME_ORIGIN) return;
 
       let msg: ShellMessage;
       try {
@@ -62,7 +65,12 @@ export function ArtifactRunner({ source, kind = 'jsx', deps, onError, onNetworkE
       if (msg.stage === 'ready') {
         setStage('ready');
         const payload = { type: 'mount' as const, source, kind, deps };
-        ref.current!.contentWindow!.postMessage(JSON.stringify(payload), RUNTIME_ORIGIN);
+        // targetOrigin must be '*' here: the sandbox gives the iframe an opaque
+        // origin, so no URL-based targetOrigin would match and the message would
+        // be dropped. Safe because the sandbox itself isolates the iframe from
+        // app data, and the payload (artifact source) is what the iframe will
+        // render anyway.
+        ref.current!.contentWindow!.postMessage(JSON.stringify(payload), '*');
       } else if (msg.stage === 'mounted') {
         setStage('mounted');
         setBootSlow(false);

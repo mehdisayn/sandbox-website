@@ -18,5 +18,6 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 
 ## Bundle contents
 
-- `sandboxweb/README.md` — this file
-- `sandboxweb/project/` — the `SANDBOXWEB` project files (HTML prototypes, assets, components)
+- `design/README.md` — this file
+- `design/project/` — the `sandbox web` project files (HTML prototypes, assets, components)
+- `design/assets` - contains icons and logo if needed
