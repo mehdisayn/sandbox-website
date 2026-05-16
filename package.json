@@ -1,0 +1,16 @@
+{
+  "name": "sandbox-web",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": ["app", "runtime"],
+  "scripts": {
+    "dev": "concurrently -n app,runtime -c cyan,yellow \"npm:dev:app\" \"npm:dev:runtime\"",
+    "dev:app": "npm --workspace app run dev",
+    "dev:runtime": "npm --workspace runtime run dev",
+    "build": "npm --workspace runtime run build && npm --workspace app run build",
+    "typecheck": "npm --workspace app run typecheck && npm --workspace runtime run typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
