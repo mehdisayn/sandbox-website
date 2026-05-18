@@ -41,6 +41,40 @@ Tracking the build from scaffold to v1.
 
 ---
 
+## Demo deployment — GitHub Pages
+
+The blocker is structural: ARCHITECTURE.md §3 requires the runtime and the app to live on **different origins**, but every `*.github.io` page shares the same `<user>.github.io` origin. Decide the topology first; everything else flows from it.
+
+- [ ] **#26 · Decide origin topology.** Pick one before any pipeline work:
+  - **A · Two custom subdomains (recommended).** `sandbox.<yourdomain>` for the app, `sandbox-runtime.<yourdomain>` for the runtime. Two `CNAME` files, two Pages sites, full two-origin isolation. Costs a domain.
+  - **B · One github.io, two paths.** `<user>.github.io/sandbox-app/` + `<user>.github.io/sandbox-runtime/`. Same URL origin, so only the `sandbox` attribute provides isolation (still real — opaque origin from the sandbox — but no defense-in-depth). Acceptable for a demo with a banner; not for anything with stored credentials later.
+  - **C · App on Pages, runtime on a different free host** (Cloudflare Pages / Netlify / Vercel free tier). True two-origin without buying a domain.
+
+- [ ] **#27 · Build-time origin wiring.** Bake the right origins into the static build:
+  - `app/`: `vite build` with `VITE_RUNTIME_ORIGIN` set to the chosen runtime URL.
+  - `runtime/`: `vite build` with `APP_ORIGIN` env so the CSP `frame-ancestors` matches.
+  - Set Vite `base` per workspace (`/sandbox-app/`, `/sandbox-runtime/`, or `/` for subdomains).
+
+- [ ] **#28 · Runtime CSP without server headers.** GitHub Pages can't set response headers, so the runtime's CSP (currently in `runtime/vite.config.ts`) won't apply on Pages. Move the CSP into `<meta http-equiv="Content-Security-Policy">` inside `shell.html` for the deployed build (dev keeps the header path).
+
+- [ ] **#29 · GitHub Actions workflow.** `.github/workflows/deploy.yml` that on push to `main`:
+  1. Installs deps, runs `npm run typecheck`, then `npm run build` (with the env vars from #27).
+  2. Publishes `app/dist` and `runtime/dist` via `actions/upload-pages-artifact` + `actions/deploy-pages` (one workflow per repo if going split-repo, or two jobs if same).
+  3. Caches `node_modules` and `runtime/public/libs` so the 3.1 MB Babel download doesn't re-run per build.
+
+- [ ] **#30 · SPA-fallback `404.html`.** Pages serves `404.html` for unknown paths. Copy `app/dist/index.html` → `app/dist/404.html` after build so React Router's history-mode routes (`/library`, `/run/:id`, etc.) survive deep-links and refreshes.
+
+- [ ] **#31 · Demo guardrails.** Things only relevant on the public demo:
+  - "DEMO · data stays in your browser" pill in the sidebar footer.
+  - Disable destructive Reset library confirmation copy if needed (clarify it only wipes local IndexedDB).
+  - Verify the CDN allowlist still functions when fronted by Pages' CSP.
+
+- [ ] **#32 · Post-deploy smoke test.** Re-run #25 against the live demo URLs in Chrome, Safari, Firefox — desktop + mobile. Watch for: iframe boot (the `event.origin === "null"` path), drag-drop ingestion on touch, dependency fetch hitting the CDNs, dark mode parity.
+
+- [ ] **#33 · Wire the live URL.** Once deployed, add the demo URL to `README.md` (top) and to the Welcome screen's "About SANDBOX" link target.
+
+---
+
 ## Out of scope for v1
 
 - Accounts, sync, shareable links.
