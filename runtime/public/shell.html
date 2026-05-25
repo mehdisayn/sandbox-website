@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANDBOX Runtime</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    #root { min-height: 100vh; }
+  </style>
+  <script src="/libs/react.js"></script>
+  <script src="/libs/react-dom.js"></script>
+  <script src="/libs/babel.js"></script>
+  <script src="/libs/tailwind.js"></script>
+  <script>
+    // Expose React hooks/APIs as bare globals so artifacts can `useState(0)`
+    // without an `import React, { useState } from 'react'`. Matches the native
+    // SANDBOX runtime convention and the Compose-screen starter template.
+    (function () {
+      var names = [
+        'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback',
+        'useContext', 'useReducer', 'useLayoutEffect', 'useImperativeHandle',
+        'useDebugValue', 'useTransition', 'useDeferredValue', 'useId',
+        'useSyncExternalStore', 'useInsertionEffect',
+        'Fragment', 'StrictMode', 'Suspense',
+        'createContext', 'forwardRef', 'memo', 'lazy', 'createRef',
+        'cloneElement', 'isValidElement', 'Children', 'createElement',
+      ];
+      for (var i = 0; i < names.length; i++) {
+        if (window.React && window.React[names[i]] !== undefined) {
+          window[names[i]] = window.React[names[i]];
+        }
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var APP_ORIGIN = params.get('app') || '';
+
+      function post(msg) {
+        window.parent.postMessage(JSON.stringify(msg), APP_ORIGIN || '*');
+      }
+
+      var _nativeFetch = window.fetch;
+      window.fetch = function (input, init) {
+        return _nativeFetch.call(window, input, init).catch(function (err) {
+          post({
+            stage: 'network-error',
+            detail: {
+              url: typeof input === 'string' ? input
+                : input instanceof Request ? input.url
+                : String(input),
+              message: err.message,
+            },
+          });
+          throw err;
+        });
+      };
+
+      function makeRequire(deps) {
+        var depMap = {};
+        (deps || []).forEach(function (d) { depMap[d.name] = d.source; });
+        var cache = {};
+
+        function req(name) {
+          if (name === 'react') return window.React;
+          if (name === 'react-dom' || name === 'react-dom/client') return window.ReactDOM;
+          if (name === 'react/jsx-runtime' || name === 'react/jsx-dev-runtime') {
+            return {
+              jsx: window.React.createElement,
+              jsxs: window.React.createElement,
+              jsxDEV: window.React.createElement,
+              Fragment: window.React.Fragment,
+            };
+          }
+          if (cache[name]) return cache[name];
+          if (depMap[name]) {
+            var mod = { exports: {} };
+            try {
+              new Function('module', 'exports', 'require', depMap[name])(mod, mod.exports, req);
+            } catch (e) {
+              post({ stage: 'dep-error', detail: name + ': ' + e.message });
+              return {};
+            }
+            cache[name] = mod.exports;
+            return mod.exports;
+          }
+          console.warn('[sandbox] unknown module:', name);
+          return {};
+        }
+        return req;
+      }
+
+      // Pull top-level PascalCase function / const / let / var declarations out
+      // of the original source so we can capture them by name after eval.
+      // Babel keeps these names verbatim, so a source-side scan works.
+      function extractTopLevelNames(source) {
+        var names = [];
+        var seen = {};
+        function add(n) { if (!seen[n]) { seen[n] = true; names.push(n); } }
+        var fnRe = /^[\t ]*(?:export\s+(?:default\s+)?)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/gm;
+        var varRe = /^[\t ]*(?:export\s+(?:default\s+)?)?(?:const|let|var)\s+([A-Z][A-Za-z0-9_]*)\s*=/gm;
+        var m;
+        while ((m = fnRe.exec(source)) !== null) add(m[1]);
+        while ((m = varRe.exec(source)) !== null) add(m[1]);
+        return names;
+      }
+
+      function mountJSX(source, deps) {
+        var require = makeRequire(deps);
+        var rootEl = document.getElementById('root');
+        var componentNames = extractTopLevelNames(source);
+
+        var transformed;
+        try {
+          transformed = Babel.transform(source, {
+            presets: [
+              ['react', { runtime: 'classic' }],
+              ['env', { modules: 'commonjs', targets: { esmodules: false } }],
+            ],
+            filename: 'artifact.jsx',
+          }).code;
+        } catch (e) {
+          post({ stage: 'error', detail: 'Syntax error: ' + e.message });
+          return;
+        }
+
+        // Append a capture clause: try each top-level PascalCase identifier,
+        // preferring `App` (convention), then the rest in reverse-declaration
+        // order (the root component is usually defined last). __setComponent__
+        // is a parameter passed into the new Function below.
+        var ordered = componentNames.slice().reverse();
+        if (componentNames.indexOf('App') !== -1) {
+          ordered = ['App'].concat(ordered.filter(function (n) { return n !== 'App'; }));
+        }
+        var captureClause = '\n;(function(){try{' +
+          ordered.map(function (n) {
+            return 'if(typeof ' + n + '==="function"){__setComponent__(' + n + ');return;}';
+          }).join('') +
+          '}catch(_){}})();';
+
+        var captured = null;
+        function setComponent(c) { if (!captured && typeof c === 'function') captured = c; }
+
+        try {
+          var mod = { exports: {} };
+          // eslint-disable-next-line no-new-func
+          new Function(
+            'React', 'ReactDOM', 'require', 'module', 'exports', '__setComponent__',
+            transformed + captureClause
+          )(window.React, window.ReactDOM, require, mod, mod.exports, setComponent);
+
+          var exported = mod.exports;
+          var Component =
+            (exported && typeof exported.default === 'function') ? exported.default :
+            typeof exported === 'function' ? exported :
+            captured ||
+            null;
+
+          if (Component) {
+            rootEl.innerHTML = '';
+            ReactDOM.createRoot(rootEl).render(React.createElement(Component));
+            post({ stage: 'mounted' });
+            return;
+          }
+
+          // No component found by name or export — maybe the artifact already
+          // self-mounted via ReactDOM.createRoot/.render. Watch the root for a
+          // brief window in case the first commit is scheduled async.
+          if (rootEl.childNodes.length > 0) {
+            post({ stage: 'mounted' });
+            return;
+          }
+          var timer;
+          var observer = new MutationObserver(function () {
+            if (rootEl.childNodes.length > 0) {
+              observer.disconnect();
+              clearTimeout(timer);
+              post({ stage: 'mounted' });
+            }
+          });
+          observer.observe(rootEl, { childList: true, subtree: true });
+          timer = setTimeout(function () {
+            observer.disconnect();
+            if (rootEl.childNodes.length > 0) {
+              post({ stage: 'mounted' });
+            } else {
+              post({
+                stage: 'error',
+                detail: 'Nothing rendered. Define a top-level component (e.g. function App() {…}), use export default, or call ReactDOM.createRoot(document.getElementById("root")).render(<App />).',
+              });
+            }
+          }, 500);
+        } catch (e) {
+          post({ stage: 'error', detail: e.message || String(e) });
+        }
+      }
+
+      function mountHTML(source) {
+        post({ stage: 'mounted' });
+        document.open();
+        document.write(source);
+        document.close();
+      }
+
+      window.addEventListener('message', function (e) {
+        if (e.source !== window.parent) return;
+        if (APP_ORIGIN && e.origin !== APP_ORIGIN) return;
+
+        var msg;
+        try {
+          msg = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        } catch (_) {
+          return;
+        }
+        if (!msg || msg.type !== 'mount') return;
+
+        if (msg.kind === 'html') {
+          mountHTML(msg.source || '');
+        } else {
+          mountJSX(msg.source || '', msg.deps);
+        }
+      });
+
+      post({ stage: 'ready' });
+    })();
+  </script>
+</body>
+</html>
