@@ -7,6 +7,7 @@ type Item = { to: string; label: string; glyph: string };
 
 const ITEMS: Item[] = [
   { to: '/library', label: 'Library',      glyph: '▦' },
+  { to: '/agent',   label: 'Agent',        glyph: '✦' },
   { to: '/compose',  label: 'Compose',      glyph: '✎' },
   { to: '/settings/dependencies', label: 'Dependencies', glyph: '⧉' },
   { to: '/settings', label: 'Settings',     glyph: '⚙' },

@@ -1,12 +1,14 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { IngestionProvider } from './components/IngestionProvider';
 import { SettingsProvider } from './lib/settings-context';
+import { Agent } from './screens/Agent';
 import { Compose } from './screens/Compose';
 import { Details } from './screens/Details';
 import { Library } from './screens/Library';
 import { Run } from './screens/Run';
 import { Welcome } from './screens/Welcome';
 import { About } from './screens/settings/About';
+import { AgentSettings } from './screens/settings/Agent';
 import { Appearance } from './screens/settings/Appearance';
 import { Credits } from './screens/settings/Credits';
 import { Dependencies } from './screens/settings/Dependencies';
@@ -34,7 +36,9 @@ export const router = createBrowserRouter([
       { path: '/run/:id', element: <Run /> },
       { path: '/details/:id', element: <Details /> },
       { path: '/compose', element: <Compose /> },
+      { path: '/agent', element: <Agent /> },
       { path: '/settings', element: <SettingsHub /> },
+      { path: '/settings/agent', element: <AgentSettings /> },
       { path: '/settings/appearance', element: <Appearance /> },
       { path: '/settings/dependencies', element: <Dependencies /> },
       { path: '/settings/storage', element: <Storage /> },

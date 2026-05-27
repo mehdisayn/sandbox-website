@@ -45,6 +45,10 @@ export function SettingsHub() {
         <Row label="Featured mini-apps" iconType="glyph" iconValue="★" iconFill="sand" onClick={() => navigate('/settings/featured')} last />
       </Group>
 
+      <Group label="AI">
+        <Row label="Agent provider" iconType="glyph" iconValue="✦" iconFill="lilac" onClick={() => navigate('/settings/agent')} last />
+      </Group>
+
       <Group label="Data">
         <Row label="Dependencies" iconType="glyph" iconValue="⧉" iconFill="sky" onClick={() => navigate('/settings/dependencies')} />
         <Row label="Storage"      iconType="glyph" iconValue="◫" iconFill="mist" onClick={() => navigate('/settings/storage')} />
