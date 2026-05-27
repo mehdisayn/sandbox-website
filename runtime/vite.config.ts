@@ -42,7 +42,10 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: { shell: 'public/shell.html' },
+      // shell.html lives at the runtime root (not publicDir) so it becomes
+      // the natural Vite entry and lands at dist/shell.html — no nested
+      // dist/public/ subdirectory.
+      input: 'shell.html',
     },
   },
 });

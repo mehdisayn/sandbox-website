@@ -1,0 +1,11 @@
+# Cloudflare Pages headers — runtime origin.
+# Mirrors runtime/vite.config.ts so dev-server and prod serve identical headers.
+# frame-ancestors is the app origin only; update here AND in vite.config.ts if it changes.
+
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; frame-ancestors https://mehdisayn.github.io; base-uri 'none'; form-action 'none'
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+
+/libs/*
+  Cache-Control: public, max-age=31536000, immutable
