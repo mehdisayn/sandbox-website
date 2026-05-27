@@ -2,6 +2,7 @@
 
 import { NavLink } from 'react-router-dom';
 import type { ReactNode } from 'react';
+import { SyncStatusPill } from './SyncStatusPill';
 
 type Item = { to: string; label: string; glyph: string };
 
@@ -49,6 +50,9 @@ export function Sidebar({ footer }: { footer?: ReactNode }) {
       ))}
       <div className="flex-1" />
       {footer && <div className="border-t border-dashed border-divider p-1.5 pt-2">{footer}</div>}
+      <div className="px-1.5 pt-2">
+        <SyncStatusPill />
+      </div>
       <div className="px-1.5 pt-2 font-mono text-[9px] uppercase tracking-widest text-ink-faint">
         Built by Syed Mehedi Hussain
       </div>
