@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SettingsLayout } from './SettingsLayout';
 import { Group } from '../../components/ui/Group';
-import { artifactRepo, dependencyRepo } from '../../lib/repo/dexie-repos';
+import { artifactRepo, dependencyRepo } from '../../lib/repo/active';
 
 export function Storage() {
   const [artBytes, setArtBytes] = useState(0);

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { SettingsLayout } from './SettingsLayout';
 import { Btn } from '../../components/ui/Btn';
 import { AppIcon } from '../../components/ui/AppIcon';
-import { artifactRepo } from '../../lib/repo/dexie-repos';
+import { artifactRepo } from '../../lib/repo/active';
 import { sizeBytes } from '../../lib/artifacts';
 import { FEATURED_APPS } from '../../lib/featured-apps';
 

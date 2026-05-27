@@ -1,6 +1,6 @@
 // Typed wrapper around PrefsRepo for known preference keys.
 
-import { prefsRepo } from './repo/dexie-repos';
+import { prefsRepo } from './repo/active';
 
 export const PREF_KEYS = {
   theme: 'theme',                // 'system' | 'light' | 'dark'

@@ -50,6 +50,7 @@ export function SettingsHub() {
       </Group>
 
       <Group label="Data">
+        <Row label="Sync"         iconType="glyph" iconValue="⇅" iconFill="sky" onClick={() => navigate('/settings/sync')} />
         <Row label="Dependencies" iconType="glyph" iconValue="⧉" iconFill="sky" onClick={() => navigate('/settings/dependencies')} />
         <Row label="Storage"      iconType="glyph" iconValue="◫" iconFill="mist" onClick={() => navigate('/settings/storage')} />
         <Row label="Logs"         iconType="glyph" iconValue="≡" iconFill="stone" onClick={() => navigate('/settings/logs')} last />

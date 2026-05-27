@@ -8,7 +8,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { artifactRepo } from '../lib/repo/dexie-repos';
+import { artifactRepo } from '../lib/repo/active';
 import type { Artifact } from '../lib/repo/types';
 import { Sidebar } from '../components/Sidebar';
 import { BottomNav } from '../components/BottomNav';

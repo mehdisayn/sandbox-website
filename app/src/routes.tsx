@@ -16,6 +16,7 @@ import { Featured } from './screens/settings/Featured';
 import { Logs } from './screens/settings/Logs';
 import { SettingsHub } from './screens/settings/SettingsHub';
 import { Storage } from './screens/settings/Storage';
+import { Sync } from './screens/settings/Sync';
 
 function RootLayout() {
   return (
@@ -42,6 +43,7 @@ export const router = createBrowserRouter([
       { path: '/settings/appearance', element: <Appearance /> },
       { path: '/settings/dependencies', element: <Dependencies /> },
       { path: '/settings/storage', element: <Storage /> },
+      { path: '/settings/sync', element: <Sync /> },
       { path: '/settings/logs', element: <Logs /> },
       { path: '/settings/featured', element: <Featured /> },
       { path: '/settings/about', element: <About /> },

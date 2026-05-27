@@ -12,7 +12,7 @@ import { Btn } from '../components/ui/Btn';
 import { Input } from '../components/ui/Input';
 import { Pill } from '../components/ui/Pill';
 import { Caption } from '../components/ui/Caption';
-import { artifactRepo } from '../lib/repo/dexie-repos';
+import { artifactRepo } from '../lib/repo/active';
 import { sizeBytes } from '../lib/artifacts';
 import { detectImports } from '../lib/import-detector';
 import { ensureArtifactDeps } from '../lib/dep-fetcher';

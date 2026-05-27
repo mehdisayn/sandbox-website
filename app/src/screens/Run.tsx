@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArtifactRunner } from '../components/ArtifactRunner';
 import { AppIcon } from '../components/ui/AppIcon';
-import { artifactRepo } from '../lib/repo/dexie-repos';
+import { artifactRepo } from '../lib/repo/active';
 import { loadDependenciesForArtifact } from '../lib/dep-fetcher';
 import type { CachedDependency } from '../shared/protocol';
 import type { Artifact } from '../lib/repo/types';

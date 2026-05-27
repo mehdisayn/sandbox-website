@@ -6,7 +6,7 @@ import {
   createContext, useCallback, useContext, useEffect, useState,
   type ReactNode,
 } from 'react';
-import { prefsRepo } from './repo/dexie-repos';
+import { prefsRepo } from './repo/active';
 import { PREF_KEYS } from './prefs';
 
 export type ThemeMode = 'system' | 'light' | 'dark';

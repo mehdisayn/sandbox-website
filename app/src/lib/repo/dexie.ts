@@ -13,12 +13,26 @@ export type ArtifactDepRow = {
 export type PrefRow = { key: string; value: unknown };
 export type IconRow = { id: string; blob: Blob };
 
+// Pending write to the cloud backing store. Persisted so a closed tab can
+// resume mid-flight. `payload` is the snapshot at enqueue time; coalescing by
+// `(op, key)` happens in the queue runner, not here.
+export type SyncQueueRow = {
+  id: string;             // crypto.randomUUID()
+  op: 'artifact.put' | 'artifact.delete' | 'prefs.put';
+  key: string;            // artifactId or pref key — used for coalescing
+  payload: unknown;
+  attemptCount: number;
+  lastError: string | null;
+  enqueuedAt: number;
+};
+
 export class SandboxDB extends Dexie {
   artifacts!: EntityTable<Artifact, 'id'>;
   dependencies!: EntityTable<Dependency, 'id'>;
   artifactDeps!: EntityTable<ArtifactDepRow, never>;
   prefs!: EntityTable<PrefRow, 'key'>;
   icons!: EntityTable<IconRow, 'id'>;
+  syncQueue!: EntityTable<SyncQueueRow, 'id'>;
 
   constructor() {
     super('sandbox-web');
@@ -28,6 +42,11 @@ export class SandboxDB extends Dexie {
       artifactDeps: '[artifactId+dependencyId], artifactId, dependencyId',
       prefs:        'key',
       icons:        'id',
+    });
+    // v2 — add the sync queue. Existing rows are untouched; only the new
+    // table is created. Dexie runs no data migration for additive schemas.
+    this.version(2).stores({
+      syncQueue:    'id, op, key, enqueuedAt',
     });
 
     // Seed the sample artifact on first run. Dexie fires `populate` exactly

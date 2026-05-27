@@ -4,7 +4,7 @@ import { Group } from '../../components/ui/Group';
 import { Pill } from '../../components/ui/Pill';
 import { Btn } from '../../components/ui/Btn';
 import { db } from '../../lib/repo/dexie';
-import { dependencyRepo, artifactRepo } from '../../lib/repo/dexie-repos';
+import { dependencyRepo, artifactRepo } from '../../lib/repo/active';
 import type { Artifact, Dependency } from '../../lib/repo/types';
 
 type Row = Dependency & { uses: number; artifacts: Artifact[] };

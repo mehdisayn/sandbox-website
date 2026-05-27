@@ -1,7 +1,7 @@
 // Dependency resolver. Persistence is via DependencyRepo (Dexie).
 // CDN allowlist is enforced both by URL construction and by host check.
 
-import { dependencyRepo } from './repo/dexie-repos';
+import { dependencyRepo } from './repo/active';
 import { getNetworkPref } from './prefs';
 import type { CachedDependency } from '../shared/protocol';
 

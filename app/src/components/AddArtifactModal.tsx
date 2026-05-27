@@ -9,7 +9,7 @@ import { Btn } from './ui/Btn';
 import { Input } from './ui/Input';
 import { Pill } from './ui/Pill';
 import { IconPicker, type IconValue } from './IconPicker';
-import { artifactRepo } from '../lib/repo/dexie-repos';
+import { artifactRepo } from '../lib/repo/active';
 import { sizeBytes } from '../lib/artifacts';
 import { detectImports } from '../lib/import-detector';
 import { ensureArtifactDeps } from '../lib/dep-fetcher';

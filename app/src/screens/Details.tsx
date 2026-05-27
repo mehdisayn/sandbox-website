@@ -10,7 +10,7 @@ import { Input } from '../components/ui/Input';
 import { Pill } from '../components/ui/Pill';
 import { Group } from '../components/ui/Group';
 import { AppIcon } from '../components/ui/AppIcon';
-import { artifactRepo, dependencyRepo } from '../lib/repo/dexie-repos';
+import { artifactRepo, dependencyRepo } from '../lib/repo/active';
 import { copyArtifactSource, shareArtifact } from '../lib/share';
 import type { Artifact, Dependency } from '../lib/repo/types';
 
