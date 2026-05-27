@@ -9,17 +9,29 @@ export type Preset = {
   baseUrl: string;
   defaultModel: string;
   free: boolean;
+  requiresKey: boolean;
   docsUrl: string;
   keyHint: string;
 };
 
 export const PRESETS: Preset[] = [
   {
+    id: 'pollinations',
+    label: 'Pollinations (no key)',
+    baseUrl: 'https://text.pollinations.ai/openai/v1/',
+    defaultModel: 'openai',
+    free: true,
+    requiresKey: false,
+    docsUrl: 'https://pollinations.ai',
+    keyHint: 'No signup, no key. Uses a reasoning model — first visible tokens can take ~10s.',
+  },
+  {
     id: 'gemini',
     label: 'Google Gemini',
     baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/',
     defaultModel: 'gemini-2.0-flash-lite',
     free: true,
+    requiresKey: true,
     docsUrl: 'https://aistudio.google.com/apikey',
     keyHint: 'AI Studio → Get API key. Flash-lite has the highest free daily quota.',
   },
@@ -29,6 +41,7 @@ export const PRESETS: Preset[] = [
     baseUrl: 'https://openrouter.ai/api/v1/',
     defaultModel: 'deepseek/deepseek-chat-v3.1:free',
     free: true,
+    requiresKey: true,
     docsUrl: 'https://openrouter.ai/keys',
     keyHint: 'Use any model ending in :free. Browse free models at openrouter.ai/models.',
   },
@@ -38,6 +51,7 @@ export const PRESETS: Preset[] = [
     baseUrl: '',
     defaultModel: '',
     free: false,
+    requiresKey: true,
     docsUrl: '',
     keyHint: 'Any OpenAI-compatible endpoint — paste base URL, model, key. Provider must support CORS.',
   },

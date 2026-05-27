@@ -20,6 +20,7 @@ import { getAgentConfig, getNetworkPref, type AgentConfig } from '../lib/prefs';
 import { openAICompatibleProvider, type ChatMessage } from '../lib/agent/provider';
 import { SYSTEM_PROMPT } from '../lib/agent/system-prompt';
 import { extractCodeBlock, extractProse, extractSuggestedName } from '../lib/agent/extract';
+import { getPreset } from '../lib/agent/presets';
 import type { FileKind } from '../lib/repo/types';
 
 const DEFAULT_ICON: IconValue = { iconType: 'glyph', iconValue: 'AI', iconFill: 'lilac' };
@@ -69,7 +70,9 @@ export function Agent() {
   const source = sourceOverride ?? extracted?.source ?? '';
   const kind: FileKind = extracted?.kind ?? 'jsx';
   const canSave = source.trim().length > 0 && !!name.trim() && !busySave;
-  const ready = !!cfg?.apiKey && !!cfg.baseUrl && !!cfg.model;
+  const preset = cfg ? getPreset(cfg.providerId) : null;
+  const needsKey = preset ? preset.requiresKey : true;
+  const ready = !!cfg && !!cfg.baseUrl && !!cfg.model && (!needsKey || !!cfg.apiKey);
 
   async function send() {
     if (!ready || streaming) return;

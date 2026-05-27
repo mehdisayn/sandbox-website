@@ -35,15 +35,9 @@ export function openAICompatibleProvider(cfg: OpenAICompatibleOpts): LLMProvider
         messages: [{ role: 'system', content: system }, ...messages],
       };
 
-      const res = await fetch(url, {
-        method: 'POST',
-        signal,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${cfg.apiKey}`,
-        },
-        body: JSON.stringify(body),
-      });
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (cfg.apiKey) headers.Authorization = `Bearer ${cfg.apiKey}`;
+      const res = await fetch(url, { method: 'POST', signal, headers, body: JSON.stringify(body) });
 
       if (!res.ok) {
         const text = await res.text().catch(() => '');
@@ -85,12 +79,11 @@ export function openAICompatibleProvider(cfg: OpenAICompatibleOpts): LLMProvider
 export async function testConnection(cfg: OpenAICompatibleOpts): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const url = joinUrl(cfg.baseUrl, 'chat/completions');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (cfg.apiKey) headers.Authorization = `Bearer ${cfg.apiKey}`;
     const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cfg.apiKey}`,
-      },
+      headers,
       body: JSON.stringify({
         model: cfg.model,
         stream: false,

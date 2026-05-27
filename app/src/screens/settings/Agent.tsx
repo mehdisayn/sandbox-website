@@ -61,7 +61,8 @@ export function AgentSettings() {
   }
 
   const preset = getPreset(cfg.providerId);
-  const canTest = !!cfg.baseUrl && !!cfg.model && !!cfg.apiKey && !testing;
+  const needsKey = preset ? preset.requiresKey : true;
+  const canTest = !!cfg.baseUrl && !!cfg.model && (!needsKey || !!cfg.apiKey) && !testing;
   const canSave = loaded && (!!cfg.providerId || cfg.providerId === 'custom');
 
   return (
@@ -114,23 +115,26 @@ export function AgentSettings() {
           </label>
 
           <label className="flex flex-col gap-1">
-            <Caption>API key</Caption>
+            <Caption>API key {needsKey ? '' : '(not required)'}</Caption>
             <Input
               mono
               type={showKey ? 'text' : 'password'}
-              placeholder="sk-…"
+              placeholder={needsKey ? 'sk-…' : 'leave blank'}
               autoComplete="off"
+              disabled={!needsKey}
               value={cfg.apiKey}
               onChange={(e) => { setCfg({ ...cfg, apiKey: e.target.value }); setTestResult(null); setSaved(false); }}
             />
             <div className="flex items-center justify-between pt-1">
-              <button
-                type="button"
-                onClick={() => setShowKey((s) => !s)}
-                className="font-mono text-[10px] uppercase tracking-widest text-ink-soft hover:text-ink"
-              >
-                {showKey ? '· hide key' : '· show key'}
-              </button>
+              {needsKey ? (
+                <button
+                  type="button"
+                  onClick={() => setShowKey((s) => !s)}
+                  className="font-mono text-[10px] uppercase tracking-widest text-ink-soft hover:text-ink"
+                >
+                  {showKey ? '· hide key' : '· show key'}
+                </button>
+              ) : <span />}
               {preset && preset.docsUrl && (
                 <a
                   href={preset.docsUrl}
@@ -138,7 +142,7 @@ export function AgentSettings() {
                   rel="noreferrer"
                   className="font-mono text-[10px] uppercase tracking-widest text-ink-soft hover:text-ink"
                 >
-                  Get key ↗
+                  {needsKey ? 'Get key ↗' : 'Learn more ↗'}
                 </a>
               )}
             </div>
